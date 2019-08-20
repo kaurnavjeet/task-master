@@ -1,14 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
 const Todo = require("../../models/Todo");
+const User = require("../../models/User");
+const auth = require("../../middleware/auth");
 const config = require("config");
 
 // @route   GET api/todos
 // @desc    Get all todos
-// @access  Public for now
-router.get("/", async (req, res) => {
+// @access  Private
+router.get("/", auth, async (req, res) => {
   try {
-    const todos = await Todo.find();
+    const todos = await Todo.find().sort({ date: -1 });
     res.json(todos);
   } catch (error) {
     console.error(error.message);
@@ -18,27 +21,46 @@ router.get("/", async (req, res) => {
 
 // @route   POST api/todos
 // @desc    Create a todo
-// @access  Public for now
-router.post("/", async (req, res) => {
-  const { content, isComplete } = req.body;
-  try {
-    const newTodo = new Todo({
-      content: content,
-      isComplete: isComplete
-    });
+// @access  Private
+router.post(
+  "/",
+  [
+    auth,
+    [
+      check("content", "Content is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    await newTodo.save();
-    res.json(newTodo);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server error");
+    const { content, isComplete } = req.body;
+    try {
+      const user = await User.findById(req.user.id).select("-password");
+
+      const newTodo = new Todo({
+        content: content,
+        isComplete: isComplete,
+        user: req.user.id
+      });
+
+      await newTodo.save();
+      res.json(newTodo);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server error");
+    }
   }
-});
+);
 
 // @route   PUT api/todos/:id
 // @desc    Update a todo
-// @access  Public for now
-router.put("/:id", async (req, res) => {
+// @access  Private
+router.put("/:id", auth, async (req, res) => {
   try {
     let todo = await Todo.findByIdAndUpdate(
       { _id: req.params.id },
@@ -54,12 +76,17 @@ router.put("/:id", async (req, res) => {
 
 // @route   DELETE api/todos/:id
 // @desc    Delete a todo
-// @access  Public for now
-router.delete("/:id", async (req, res) => {
+// @access  Private
+router.delete("/:id", auth, async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (!todo) {
       return res.status(404).json({ msg: "Todo not found" });
+    }
+
+    // Check user
+    if (todo.user.toString() !== req.user.id) {
+      return res.json(401).json({ msg: "User not authorized" });
     }
 
     // Remove todo
@@ -76,8 +103,8 @@ router.delete("/:id", async (req, res) => {
 
 // @route   DELETE api/todos
 // @desc    Delete all todos
-// @access  Public for now
-router.delete("/", async (req, res) => {
+// @access  Private
+router.delete("/", auth, async (req, res) => {
   try {
     await Todo.find().deleteMany();
     res.json({ msg: "All todos deleted" });

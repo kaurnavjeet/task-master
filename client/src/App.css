@@ -2,4 +2,92 @@
 
 body {
   font-family: ‘Open Sans’, sans-serif;
+  background-color: #e3e2df;
 }
+
+.container {
+  background-color: white;
+}
+
+img {
+  width: 90%;
+}
+
+/* .button {
+  padding: 10px 25px;
+} */
+
+.sign-up {
+  background-color: none !important;
+  padding: 10px 20px;
+}
+
+.log-in {
+  background-color: black !important;
+  border: 1px solid black !important;
+  color: white;
+  padding: 10px 25px;
+}
+.navbar {
+  background: #fff;
+}
+
+.navbar-brand {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#showcase {
+  padding: 150px 0 100px 0;
+  background-color: #f5e0d7;
+}
+
+#showcase img {
+  margin-top: 50px;
+}
+
+#showcase h1 {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+#showcase .showcase-right {
+  margin-top: 25%;
+  padding-left: 0;
+}
+
+#categories {
+  padding: 150px 0 100px 0;
+  background-color: #e9e9e9;
+}
+
+#categories img {
+  margin-top: 60px;
+}
+
+#categories .categories-left {
+  margin-top: 100px;
+  font-size: 25px;
+  text-align: center;
+}
+
+#get-started {
+  text-align: center;
+  padding: 150px 0 100px 0;
+  background-color: #eee2dc;
+}
+
+#get-started .get-started-text {
+  margin-bottom: 25px;
+}
+
+footer {
+  padding: 30px;
+  background-color: white;
+}
+
+/* @media (min-width: 1200px) {
+  .container {
+    max-width: 2000px;
+  }
+} */
