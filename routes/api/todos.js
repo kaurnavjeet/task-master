@@ -11,7 +11,7 @@ const config = require("config");
 // @access  Private
 router.get("/", auth, async (req, res) => {
   try {
-    const todos = await Todo.find().sort({ date: -1 });
+    const todos = await Todo.find({ user: req.user.id }).sort({ date: -1 });
     res.json(todos);
   } catch (error) {
     console.error(error.message);
@@ -48,8 +48,8 @@ router.post(
         user: req.user.id
       });
 
-      await newTodo.save();
-      res.json(newTodo);
+      const todo = await newTodo.save();
+      res.json(todo);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Server error");
@@ -57,16 +57,36 @@ router.post(
   }
 );
 
+//@route   POST api/todos/:id/complete
+//@desc    Mark todo as complete or not
+//@access  Private
+router.post("/:id/complete", auth, async (req, res) => {
+  try {
+    const todo = await Todo.findById(req.params.id);
+    if (todo.user.toString() !== req.user.id) {
+      return res.json(401).json({ msg: "User not authorized" });
+    }
+    todo.isComplete = !todo.isComplete;
+    await todo.save();
+    res.json({ id: req.params.id });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
 // @route   PUT api/todos/:id
 // @desc    Update a todo
 // @access  Private
 router.put("/:id", auth, async (req, res) => {
   try {
-    let todo = await Todo.findByIdAndUpdate(
+    let todo = await Todo.findById({ _id: req.params.id });
+
+    todo = await Todo.findOneAndUpdate(
       { _id: req.params.id },
-      { $set: { content: req.body.content, isComplete: req.body.isComplete } },
-      { new: true }
+      { content: req.body.content }
     );
+
     res.json(todo);
   } catch (error) {
     console.error(error.message);

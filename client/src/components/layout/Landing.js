@@ -1,10 +1,17 @@
 import React, { Fragment } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import completeTask from "./images/undraw_selection_92i4 (1).svg";
 import doneTask from "./images/undraw_done_checking_ty9a (2).svg";
-import { Button, Container, Row, Col, ButtonToolbar } from "react-bootstrap";
+import { Button, Container, Row, Col } from "react-bootstrap";
 import Slide from "react-reveal/Slide";
 
-const Landing = () => {
+const Landing = ({ isAuthenticated }) => {
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+
   return (
     <Fragment>
       <Container className="container">
@@ -28,12 +35,17 @@ const Landing = () => {
               </p>
             </div>
 
-            <Button className="button sign-up mx-2" variant="outline-dark">
-              Sign up
-            </Button>
-            <Button className="button log-in mx-2" variant="info">
-              Log in
-            </Button>
+            <Link to="/register">
+              <Button className="button sign-up mx-2" variant="outline-dark">
+                Sign up
+              </Button>
+            </Link>
+
+            <Link to="/login">
+              <Button className="button log-in mx-2" variant="info">
+                Log in
+              </Button>
+            </Link>
           </Col>
         </Row>
 
@@ -70,12 +82,16 @@ const Landing = () => {
           </Col>
           <Col xs={12}>
             <div className="get-started-buttons">
-              <Button className="button sign-up mx-2" variant="outline-dark">
-                Sign up
-              </Button>
-              <Button className="button log-in mx-2" variant="info">
-                Log in
-              </Button>
+              <Link to="/register">
+                <Button className="button sign-up mx-2" variant="outline-dark">
+                  Sign up
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button className="button log-in mx-2" variant="info">
+                  Log in
+                </Button>
+              </Link>
             </div>
           </Col>
         </Row>
@@ -89,4 +105,12 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+Landing.propTypes = {
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps)(Landing);
