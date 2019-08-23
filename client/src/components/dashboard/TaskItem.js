@@ -1,51 +1,50 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Row, Col, Form, Card } from "react-bootstrap";
+import React from "react";
+import { Form, Card } from "react-bootstrap";
 import Fade from "react-reveal/Fade";
-import { connect } from "react-redux";
-import { editTodo } from "../../actions/todo";
-import PropTypes from "prop-types";
+// import { connect } from "react-redux";
+// import { editTodo } from "../../actions/todo";
+// import PropTypes from "prop-types";
 
 const TaskItem = props => {
-  const { todo, completeTodo, deleteTodo, editTodo } = props;
+  const { todo, completeTodo, deleteTodo } = props;
 
-  const [editing, setEditing] = useState(false);
-  const [editVal, setEditVal] = useState(todo.content);
+  // const [editing, setEditing] = useState(false);
+  // const [editVal, setEditVal] = useState(todo.content);
 
-  const handleEditing = e => {
-    setEditing(true);
-  };
+  // const handleEditing = e => {
+  //   setEditing(true);
+  // };
 
-  const handleChange = e => {
-    setEditVal(e.target.value);
-  };
+  // const handleChange = e => {
+  //   setEditVal(e.target.value);
+  // };
 
-  const handleEditingDone = (e, id) => {
-    console.log(id);
-    if (e.keyCode === 13) {
-      const val = editVal.trim();
-      if (val) {
-        editTodo(val, id);
-        setEditing(false);
-      }
-    }
-  };
+  // const handleEditingDone = (e, id) => {
+  //   console.log(id);
+  //   if (e.keyCode === 13) {
+  //     let val = editVal.trim();
+  //     if (val) {
+  //       editTodo(val, id);
+  //       setEditing(false);
+  //     }
+  //   }
+  // };
 
-  const viewStyle = {};
-  const editStyle = {};
+  // const viewStyle = {};
+  // const editStyle = {};
 
-  if (editing) {
-    viewStyle.display = "none";
-  } else {
-    editStyle.display = "none";
-  }
+  // if (editing) {
+  //   viewStyle.display = "none";
+  // } else {
+  //   editStyle.display = "none";
+  // }
 
   return (
     <Fade collapse bottom className={todo.isComplete ? "done" : ""}>
       <Card>
         <Card.Body className="justify-content-between">
-          <div style={viewStyle} onDoubleClick={handleEditing}>
+          <div>
             <span
-              className={editing ? "true" : ""}
               style={{
                 textDecoration:
                   todo.isComplete === true ? "line-through" : "none"
@@ -74,33 +73,26 @@ const TaskItem = props => {
                 <span aria-hidden="true">&times;</span>
               </button>
 
-              <button type="button" className="action edit" data-id={todo._id}>
+              {/* <button type="button" className="action edit" data-id={todo._id}>
                 <span aria-hidden="true">
                   <i className="fas fa-pencil-alt edit-icon" />
                 </span>{" "}
-              </button>
+              </button> */}
             </span>
           </div>
 
-          <input
+          {/* <input
             data-id={todo._id}
             type="text"
             value={editVal || ""}
             style={editStyle}
             onChange={handleChange}
             onKeyDown={e => handleEditingDone(e, todo._id)}
-          />
+          /> */}
         </Card.Body>
       </Card>
     </Fade>
   );
 };
 
-TaskItem.propTypes = {
-  editTodo: PropTypes.func.isRequired
-};
-
-export default connect(
-  null,
-  { editTodo }
-)(TaskItem);
+export default TaskItem;

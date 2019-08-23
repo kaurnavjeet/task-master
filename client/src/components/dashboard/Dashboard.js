@@ -1,18 +1,14 @@
-import React, { useState, useEffect, Fragment, useRef } from "react";
-import { Container, Row, Col, Card, Form, Popover } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import { getTodos } from "../../actions/todo";
 import { addTodo } from "../../actions/todo";
 import { completeTodo } from "../../actions/todo";
 import { deleteTodo } from "../../actions/todo";
-
+import { deleteAllTodos } from "../../actions/todo";
+import DashboardActions from "./DashboardActions";
 import TaskItem from "./TaskItem";
 import PropTypes from "prop-types";
-
-import TransitionGroup from "react-transition-group/TransitionGroup";
-// import DashboardActions from "./DashboardActions";
-// import VisibleTodoList from "./VisibleTodoList";
-import { VisibilityFilters } from "../../actions/visibilityFilter";
 
 const Dashboard = ({
   todo: { todos },
@@ -20,6 +16,7 @@ const Dashboard = ({
   addTodo,
   completeTodo,
   deleteTodo,
+  deleteAllTodos,
   auth: { user }
 }) => {
   const [content, setContent] = useState("");
@@ -38,6 +35,16 @@ const Dashboard = ({
     setContent("");
   };
 
+  const handleDelete = e => {
+    e.preventDefault();
+    const res = window.confirm(
+      "Are you sure you want to delete all tasks? This can not be undone."
+    );
+    if (res) {
+      deleteAllTodos();
+    }
+  };
+
   return (
     <Container id="dashboard-container">
       <Row className="dashboard-title">
@@ -50,8 +57,7 @@ const Dashboard = ({
           </div>
         </Col>
       </Row>
-      {/* <VisibleTodoList />
-      <DashboardActions /> */}
+      <DashboardActions getTodos={getTodos} />
       <Row id="dashboard" className="dashboard-list">
         <Col xs={12}>
           <div className="col-12 mb-2">
@@ -65,7 +71,11 @@ const Dashboard = ({
                 />
               ))
             ) : (
-              <h4>No tasks found, please create a task to get started.</h4>
+              <Card>
+                <Card.Body className="justify-content-between">
+                  No tasks found, please create a task to get started.
+                </Card.Body>
+              </Card>
             )}
           </div>
           <Form autoComplete="off" onSubmit={handleSubmit}>
@@ -76,14 +86,14 @@ const Dashboard = ({
                     onChange={handleChange}
                     value={content}
                     type="text"
-                    className="form-control"
+                    className="form-control "
                     id="todoField"
-                    placeholder="Todo item"
+                    placeholder="Task item"
                     name="content"
                   />
                   <div className="input-group-append">
                     <button className="btn btn-outline-success" type="submit">
-                      Add Item
+                      Add Task
                     </button>
                   </div>
                 </div>
@@ -93,6 +103,23 @@ const Dashboard = ({
               </Col>
             </Row>
           </Form>
+        </Col>
+      </Row>
+      <Row style={{ paddingTop: "50px" }}>
+        <Col xs={12}>
+          <Button
+            className="action-button"
+            style={{
+              paddingRight: "40px",
+              paddingLeft: "40px",
+              marginRight: "20px"
+            }}
+            variant="outline-danger"
+            type="submit"
+            onClick={handleDelete}
+          >
+            Delete All Tasks
+          </Button>
         </Col>
       </Row>
     </Container>
@@ -105,8 +132,8 @@ Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
   addTodo: PropTypes.func.isRequired,
   completeTodo: PropTypes.func.isRequired,
-
-  deleteTodo: PropTypes.func.isRequired
+  deleteTodo: PropTypes.func.isRequired,
+  deleteAllTodos: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -116,5 +143,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getTodos, addTodo, completeTodo, deleteTodo }
+  { getTodos, addTodo, completeTodo, deleteTodo, deleteAllTodos }
 )(Dashboard);

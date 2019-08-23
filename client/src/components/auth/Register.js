@@ -30,7 +30,7 @@ const Register = ({ register, isAuthenticated }) => {
 
   return (
     <Container id="register" className="justify-content-center">
-      <form className="border border-dark form">
+      <form className="border border-dark form" onSubmit={handleSubmit}>
         <h1 className="register-title">Sign Up</h1>
         <div className="form-group">
           <label htmlFor="inputName">Name</label>
@@ -86,7 +86,7 @@ const Register = ({ register, isAuthenticated }) => {
         <Button
           className="button sign-up register"
           variant="outline-dark"
-          onClick={handleSubmit}
+          type="submit"
         >
           Sign up
         </Button>

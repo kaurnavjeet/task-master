@@ -28,7 +28,7 @@ const Login = ({ login, isAuthenticated }) => {
 
   return (
     <Container id="login">
-      <form className="border border-dark form">
+      <form className="border border-dark form" onSubmit={handleSubmit}>
         <h1 className="login-title">Log In</h1>
 
         <div className="form-group">
@@ -57,9 +57,9 @@ const Login = ({ login, isAuthenticated }) => {
         </div>
 
         <Button
+          type="submit"
           className="button log-in login"
           variant="outline-dark"
-          onClick={handleSubmit}
         >
           Log In
         </Button>
