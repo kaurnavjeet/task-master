@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://navjeet:Godof510%21@task-master-fjsyf.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://navjeet:1234567890@task-master-fjsyf.mongodb.net/test?retryWrites=true&w=majority",
   "jwtSecret": "mysecrettoken"
 }
