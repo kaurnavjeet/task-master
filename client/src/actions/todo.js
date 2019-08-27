@@ -8,8 +8,8 @@ import {
   COMPLETE_TODO,
   SHOW_ACTIVE,
   SHOW_COMPLETED,
-  DELETE_ALL_TODOS
-  // EDIT_TODO,
+  DELETE_ALL_TODOS,
+  EDIT_TODO
 } from "./types";
 
 //Get todos
@@ -52,31 +52,28 @@ export const addTodo = content => async dispatch => {
   }
 };
 
-// //Edit todo
-// export const editTodo = (content, id) => async dispatch => {
-//   try {
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json,charset=utf-8"
-//       }
-//     };
-
-//     const res = await axios.put(`/api/todos/${id}`, content, config);
-//     console.log(res);
-//     console.log(res.json);
-//     dispatch({
-//       type: EDIT_TODO,
-//       payload: res.data
-//     });
-
-//     dispatch(setAlert("Task Updated", "success"));
-//   } catch (error) {
-//     dispatch({
-//       type: TODO_ERROR,
-//       payload: { msg: error.response.data.msg, status: error.response.status }
-//     });
-//   }
-// };
+//Edit todo
+export const editTodo = (editVal, id) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+  try {
+    debugger;
+    const res = await axios.put(`/api/todos/${id}`, editVal, config);
+    dispatch({
+      type: EDIT_TODO,
+      payload: res.data
+    });
+    dispatch(setAlert("Task Updated", "success"));
+  } catch (error) {
+    dispatch({
+      type: TODO_ERROR,
+      payload: { msg: error.response.data.msg, status: error.response.status }
+    });
+  }
+};
 
 //Complete todo
 export const completeTodo = id => async dispatch => {

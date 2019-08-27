@@ -2,7 +2,7 @@ import {
   GET_TODOS,
   CLEAR_TODOS,
   ADD_TODO,
-  // EDIT_TODO,
+  EDIT_TODO,
   DELETE_TODO,
   DELETE_ALL_TODOS,
   COMPLETE_TODO,
@@ -32,14 +32,15 @@ export default function(state = initialState, action) {
         todos: [payload, ...state.todos],
         loading: false
       };
-    // case EDIT_TODO:
-    //   return {
-    //     ...state,
-    //     todos: state.todos.map(todo =>
-    //       todo._id === payload._id ? { ...todo, payload } : todo
-    //     ),
-    //     loading: false
-    //   };
+    case EDIT_TODO:
+      return {
+        ...state,
+
+        todos: state.todos.map(todo =>
+          todo._id === payload._id ? { ...todo, payload } : todo
+        ),
+        loading: false
+      };
     case SHOW_ACTIVE:
       return {
         ...state,

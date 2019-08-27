@@ -79,14 +79,12 @@ router.post("/:id/complete", auth, async (req, res) => {
 // @desc    Update a todo
 // @access  Private
 router.put("/:id", auth, async (req, res) => {
-  console.log(req.body);
   try {
-    let todo = await Todo.findByIdAndUpdate(
-      { _id: req.params.id },
+    const todo = await Todo.findByIdAndUpdate(
+      req.params.id,
       { $set: { content: req.body.content } },
       { new: true }
     );
-    console.log(req.body);
     res.json(todo);
   } catch (error) {
     console.error(error.message);
